@@ -5,6 +5,8 @@ M3U-VodDownloader Java Edition. (rewitten from my old project in python)
 - Written in Java (version 17)
 - External library: jSoup 1.14
 
+Note: If you have some probem with downloads, try to turn off your antivirus (for example, Kaspersky can block the download)
+
 Now with proxy support
 
 Download Java 17 (x64 windows) : https://bit.ly/3MFFDEj
