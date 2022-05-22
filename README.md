@@ -1,7 +1,7 @@
 # M3U-VodDownloader-JE
 
 M3U-VodDownloader Java Edition. (rewitten from my old project in python)
-- Youtube video tutorial: https://www.youtube.com/watch?v=azRVvGTMQlg
+- Youtube video tutorial: https://youtu.be/NGGlMFesvko
 - Written in Java (version 17)
 - External library: jSoup 1.14
 
