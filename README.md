@@ -1,8 +1,9 @@
 # M3U-VodDownloader-JE
-M3U-VodDownloader Java Edition. (rewitten from my old project in python)
 
-Written in Java 17
-External library (for proxy): jSoup 1.14
+M3U-VodDownloader Java Edition. (rewitten from my old project in python)
+- Youtube video tutorial: https://www.youtube.com/watch?v=azRVvGTMQlg
+- Written in Java (version 17)
+- External library: jSoup 1.14
 
 Now with proxy support
 
