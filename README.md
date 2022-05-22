@@ -1,13 +1,16 @@
 # M3U-VodDownloader-JE
 
+Video on Demand or VOD, are huge database of videos/film/media stored into a file ( .m3u or .m3u8 ), you can open it with VLC and see all the contents.
+
+I made this script to manage better this "huge" database of media and download my preferred! with this script you can: -> Manage better channels and categories into the .m3u file -> Make your own download list of media -> Download file with proxies (You don't need to import that, the script will download proxies for you)
+
 M3U-VodDownloader Java Edition. (rewitten from my old project in python)
 - Youtube video tutorial: https://youtu.be/NGGlMFesvko
 - Written in Java (version 17)
 - External library: jSoup 1.14
+- Now available with proxy 
 
 Note: If you have some probem with downloads, try to turn off your antivirus (for example, Kaspersky can block the download)
-
-Now with proxy support
 
 Download Java 17 (x64 windows) : https://bit.ly/3MFFDEj
 
