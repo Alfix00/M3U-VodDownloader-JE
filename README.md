@@ -6,7 +6,7 @@ External library (for proxy): jSoup 1.14
 
 Now with proxy support
 
-Download it: https://bit.ly/3NtaSm7
+Download Java 17 (x64 windows) : https://bit.ly/3MFFDEj
 
 Instructions:
 
