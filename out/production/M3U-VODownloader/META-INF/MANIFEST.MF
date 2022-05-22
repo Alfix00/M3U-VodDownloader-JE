@@ -1,0 +1,39 @@
+Manifest-Version: 1.0
+Created-By: Apache Maven Bundle Plugin
+Build-Jdk-Spec: 15
+Automatic-Module-Name: org.jsoup
+Bnd-LastModified: 1633067984461
+Build-Jdk: 15.0.1
+Built-By: jhy
+Bundle-Description: jsoup is a Java library for working with real-world 
+ HTML. It provides a very convenient API for fetching URLs and extractin
+ g and manipulating data, using the best of HTML5 DOM methods and CSS se
+ lectors. jsoup implements the WHATWG HTML5 specification, and parses HT
+ ML to the same DOM as modern browsers do.
+Bundle-DocURL: https://jsoup.org/
+Bundle-License: https://jsoup.org/license
+Bundle-ManifestVersion: 2
+Bundle-Name: jsoup Java HTML Parser
+Bundle-SymbolicName: org.jsoup
+Bundle-Vendor: Jonathan Hedley
+Bundle-Version: 1.14.3
+Export-Package: org.jsoup;uses:="javax.annotation,javax.net.ssl,org.jsou
+ p.nodes,org.jsoup.parser,org.jsoup.safety";version="1.14.3",org.jsoup.e
+ xamples;uses:="org.jsoup.nodes";version="1.14.3",org.jsoup.helper;uses:
+ ="javax.annotation,javax.net.ssl,javax.xml.parsers,org.jsoup,org.jsoup.
+ nodes,org.jsoup.parser,org.jsoup.select,org.w3c.dom";version="1.14.3",o
+ rg.jsoup.internal;uses:="javax.annotation,javax.annotation.meta";versio
+ n="1.14.3",org.jsoup.nodes;uses:="javax.annotation,org.jsoup,org.jsoup.
+ parser,org.jsoup.select";version="1.14.3",org.jsoup.parser;uses:="javax
+ .annotation,org.jsoup.nodes";version="1.14.3",org.jsoup.safety;uses:="o
+ rg.jsoup.nodes";version="1.14.3",org.jsoup.select;uses:="javax.annotati
+ on,org.jsoup.nodes";version="1.14.3"
+Import-Package: javax.annotation;resolution:=optional,javax.annotation.m
+ eta;resolution:=optional,javax.net.ssl,javax.xml.namespace,javax.xml.pa
+ rsers,javax.xml.transform,javax.xml.transform.dom,javax.xml.transform.s
+ tream,javax.xml.xpath,org.jsoup,org.jsoup.helper,org.jsoup.internal,org
+ .jsoup.nodes,org.jsoup.parser,org.jsoup.safety,org.jsoup.select,org.w3c
+ .dom
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+Tool: Bnd-5.1.1.202006162103
+
