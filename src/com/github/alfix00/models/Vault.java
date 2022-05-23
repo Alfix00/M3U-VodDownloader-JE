@@ -7,7 +7,7 @@ import com.github.alfix00.options.ProxyMode;
 
 public class Vault {
 
-    private String refresh_m3u = "http://vod.safetv.pro:24000/get.php?username=axxxssfi&password=5yQN58sv8b&type=m3u_plus&output=mpegts";
+    private String refresh_m3u = "";
     private boolean isEmpty = true;
     private boolean proxyMode = false;
     private ArrayList<Channel> allChannels = new ArrayList<>();
