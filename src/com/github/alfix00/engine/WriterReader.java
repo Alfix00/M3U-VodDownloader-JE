@@ -101,4 +101,13 @@ public class WriterReader implements Serializable {
         }
     }
 
+    public void removeByChannel(Channel c){
+        ArrayList<Channel> ch = getChannels();
+        for(Channel c1 : ch){
+            if(c1.equals(c)){
+                ch.remove(c1);
+            }
+        }
+    }
+
 }

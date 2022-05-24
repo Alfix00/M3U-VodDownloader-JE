@@ -1,20 +1,13 @@
 package com.github.alfix00.engine;
 
-import com.github.alfix00.view.Menu;
-
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Functions {
 
-    final private Menu menu = new Menu();
     private String m3uPath = null;
 
     public Functions() {
@@ -24,10 +17,12 @@ public class Functions {
     private boolean isFolderExist() {
         try {
             String currentPath = System.getProperty("user.dir");
+            String vod_downloader = currentPath + "/M3U-VodDownloader";
             String m3u_folder = currentPath + "/M3U-VodDownloader/m3u_folder";
             String download_folder = currentPath + "/M3U-VodDownloader/download_folder";
             String proxy_folder = currentPath + "/M3U-VodDownloader/proxy_folder";
             ArrayList<String> folders = new ArrayList<>();
+            folders.add(vod_downloader);
             folders.add(m3u_folder);
             folders.add(download_folder);
             folders.add(proxy_folder);
@@ -58,12 +53,13 @@ public class Functions {
         assert isFolderExist();
         File folder = new File(System.getProperty("user.dir") + "/M3U-VodDownloader/m3u_folder");
         File[] listOfFiles = folder.listFiles();
+        assert listOfFiles != null;
         if (listOfFiles.length > 0){
-            for (int i = 0; i < listOfFiles.length; i++) {
-                if (listOfFiles[i].isFile()) {
-                    String fileName = listOfFiles[i].getName();
+            for (File listOfFile : listOfFiles) {
+                if (listOfFile.isFile()) {
+                    String fileName = listOfFile.getName();
                     if (fileName.contains(".m3u") || fileName.contains(".m3u8")) {
-                        setM3uPath(System.getProperty("user.dir") + "/M3U-VodDownloader/m3u_folder/"+fileName.toString());
+                        setM3uPath(System.getProperty("user.dir") + "/M3U-VodDownloader/m3u_folder/" + fileName);
                         return true;
                     }
                 }
@@ -83,12 +79,10 @@ public class Functions {
 
 
     public void errors(int code){
-        switch (code){
-            case 1:
-                System.out.println("[!] M3U not found! please put into /m3u_folder the  .m3u file");
-                return;
-            default:
-                System.out.println("[Error] While pricessing Workspace ...");
+        if (code == 1) {
+            System.out.println("[!] M3U not found! please put into /m3u_folder the  .m3u file");
+        } else {
+            System.out.println("[Error] While pricessing Workspace ...");
         }
     }
 

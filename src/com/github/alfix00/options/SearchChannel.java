@@ -253,10 +253,10 @@ public class SearchChannel {
 
     private void insertMultipleIndex(ArrayList<Channel> search_list, Vault v){
         System.out.print("\n[i] Insert (-2) to back to menu ");
-        System.out.print("\n[i] Insert the index of channel ");
         try{
             int index = -1;
             while(index != -2){
+                System.out.print("\n[i] Insert the index of channel: ");
                 index = scancode.nextInt();
                 if(index > -1 && index <= search_list.size()){
                     v.addIntoDwnList(search_list.get(index));

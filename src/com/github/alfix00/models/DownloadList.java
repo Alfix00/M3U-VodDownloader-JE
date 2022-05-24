@@ -5,11 +5,9 @@ import com.github.alfix00.engine.WriterReader;
 import java.io.*;
 import java.net.*;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Scanner;
-import com.github.alfix00.engine.WriterReader;
+import java.util.*;
 
+import com.github.alfix00.engine.WriterReader;
 
 
 public class DownloadList {
@@ -17,6 +15,7 @@ public class DownloadList {
     private Vault v;
     private final Scanner sc = new Scanner(System.in);
     private final WriterReader wr = new WriterReader();
+    private final String currentPath = System.getProperty("user.dir");
     private boolean changed = false;
     public boolean downloadComplete = false;
 
@@ -24,6 +23,7 @@ public class DownloadList {
         this.v = v;
         try {
             if (!wr.getChannels().isEmpty()) {
+                removeDuplicates();
                 ArrayList<Channel> downloadList = wr.getChannels();
                 int index = 0;
                 if (downloadList.size() > 0) {
@@ -36,9 +36,9 @@ public class DownloadList {
                     System.out.println("2) Download entire list ");
                     System.out.println("3) Remove channel(s) from list ");
                     System.out.println("4) Empty List ");
-
                     System.out.print("\nChoice: ");
                     int choice = sc.nextInt();
+                    System.out.print("\n");
                     switch (choice) {
                         case 1:
                             startSingleDownload();
@@ -67,7 +67,46 @@ public class DownloadList {
         } catch (Exception e) {
             System.out.println("Going back ... - Exception: " + e);
         }
+
+
     }
+
+    public void removeDuplicates() throws IOException, ClassNotFoundException {
+        ArrayList<Channel> downloadList = wr.getChannels();
+        File[] listOfFiles = new File(currentPath+"/M3U-VodDownloader/download_folder").listFiles();
+        ArrayList<Channel> withoutDuplicates = new ArrayList<>();
+        ArrayList<String> arr_t = new ArrayList<>();
+        for(Channel c: downloadList){
+            String title = c.getName();
+            if(!arr_t.contains(title)){
+                arr_t.add(title);
+                withoutDuplicates.add(c);
+            }
+        }
+        if(listOfFiles != null && downloadList.size() > 0){
+            for(Channel c : withoutDuplicates) {
+                for (File file : listOfFiles) {
+                    if (file.isFile()) {
+                        String tmp_name = file.getName();
+                        tmp_name = tmp_name.replace(".mkv", "")
+                                .replaceAll("\\{.*?}", "")
+                                .replaceAll("\\[.*?]", "")
+                                .replaceAll("\\(.*\\)", "")
+                                .replaceAll(" ","");
+                        String tmp_cname = c.getName().replaceAll(" ","");
+                        if (tmp_name.equalsIgnoreCase(tmp_cname)) {
+                            wr.removeByChannel(c);
+                            withoutDuplicates.remove(c);
+                            downloadList.remove(c);
+                        }
+                    }
+                }
+            }
+            wr.emptyChannels();
+            wr.printChannels(withoutDuplicates);
+        }
+    }
+
 
 
     private void cleanDownloadList() {
@@ -166,8 +205,8 @@ public class DownloadList {
 
     private void startDownloadHTTP(Channel c, int index) throws InterruptedException, IOException {
         try {
-            boolean success = false;
-            System.out.println("Press [CTRL+C] or [CTRL+X] to stop the download.");
+            downloadComplete = false;
+            System.out.println("\nPress [CTRL+C] or [CTRL+X] to stop the download.");
             String currentPath = System.getProperty("user.dir");
             String download_folder = "\\M3U-VodDownloader\\download_folder\\";
             download_folder = currentPath + download_folder;
@@ -182,7 +221,7 @@ public class DownloadList {
             Thread download = new Thread(new DownloadTask(download_URL, file, title));
             download.start();
             download.join();
-            assert(!download.isAlive());
+            assert (!download.isAlive());
             if (file.isFile() && downloadComplete) {
                 URL url = null;
                 url = new URL(download_URL);
@@ -191,9 +230,8 @@ public class DownloadList {
                 http.setReadTimeout(5000);
                 double fileSize = (double) http.getContentLengthLong();
                 if (file.length() == fileSize) {
-                    System.out.println("\n" + c.getName() + "-> Download complete.");
+                    System.out.println("\n" + c.getName() + "\n-> Download complete!.");
                     wr.removeIndex(index);
-                    downloadComplete = false;
                 }
             }
         } catch (UnknownHostException ex) {
@@ -221,22 +259,22 @@ public class DownloadList {
                 HttpURLConnection http = null;
                 URL url = null;
                 url = new URL(download_url);
-                if(v.isProxyMode()){
+                if (v.isProxyMode()) {
                     Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(v.getCurrentProxyIP(), Integer.parseInt(v.getCurrentProxyPort())));
                     http = (HttpURLConnection) url.openConnection(proxy);
-                    System.out.println("[***] Using proxy: "+v.getCurrentProxy());
-                }else{
+                    System.out.println("[***] Using proxy: " + v.getCurrentProxy());
+                } else {
                     http = (HttpURLConnection) url.openConnection();
                 }
                 http.setConnectTimeout(5000);
                 http.setReadTimeout(5000);
                 long contentLong = http.getContentLengthLong();
                 double fileSize = (double) contentLong;
-                boolean ok = checkFileExist(contentLong, title);
-                if(!ok){
-                    double fileSizeDwm = 0.00;
-                    int code = http.getResponseCode();
-                    if (code == 200) {
+                double fileSizeDwm = 0.00;
+                int code = http.getResponseCode();
+                if (code == 200) {
+                    boolean ok = checkFileExist(contentLong, title);
+                    if (!ok) {
                         BufferedInputStream in = new BufferedInputStream(http.getInputStream());
                         FileOutputStream fos = new FileOutputStream(this.out);
                         BufferedOutputStream bout = new BufferedOutputStream(fos, 1024);
@@ -258,16 +296,17 @@ public class DownloadList {
                             float mbPerSec = kbPerSec / (1024);
                             String out = "Downloaded " + percent + "% - Speed: " + df.format(kbPerSec) + " Kbps -- " + title + " -- Size:  " + df.format(fileSizeDwm) + " MB /" + df.format(fileSizeComplete) + " MB";
                             System.out.print("\r" + out);
+                            downloadComplete = true;
                         }
-                        downloadComplete = true;
                         bout.close();
                         in.close();
-                    }else{
-                        System.out.println("[!] Can't connect to host - try with a different IP");
-                        Thread.sleep(1000);
                     }
+                } else {
+                    System.out.println("[!] Can't connect to host - try with a different IP -- "+title+" Skipped.");
+                    downloadComplete = false;
+                    Thread.sleep(1000);
                 }
-            } catch( InterruptedException e){
+            } catch (InterruptedException e) {
                 System.out.println("[!] Download stopped. back to menu...");
                 Thread.currentThread().interrupt();
                 e.printStackTrace();
@@ -284,16 +323,14 @@ public class DownloadList {
 
     private boolean checkFileExist(long contentLong, String title) throws IOException {
         String currentPath = System.getProperty("user.dir");
-        String pathTitle = currentPath + "/" + title;
-        boolean ok = true;
+        String pathTitle = currentPath + "/M3U-VodDownloader/" + title;
         File file = new File(pathTitle);
-        if (!file.isDirectory()) {
+        if (file.isDirectory()) {
             if (file.length() == contentLong) {
                 v.removeChannelByName(title);
                 return true;
             } else {
                 wr.removeByName(title);
-                return false;
             }
         }
         return false;
