@@ -32,9 +32,10 @@ Note: If you have some probem with downloads, try to turn off your antivirus (fo
 
 ![image](https://user-images.githubusercontent.com/44652155/170266839-079e8662-3f2a-4a5c-aa0d-bbf69acaacfc.png)
 
-Download Java 17 (x64 windows) : https://bit.ly/3MFFDEj
 
 # Windows Instructions:
+
+Download and install Java 17 (x64 windows) : https://bit.ly/3MFFDEj
 
 1) Open CMD, and check the java version (need 17). 
 - $ java -version
