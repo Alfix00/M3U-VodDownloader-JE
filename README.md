@@ -1,4 +1,5 @@
-# M3U-VodDownloader-JE
+# M3U-VodDownloader-JE 
+[++] Win / linux supported. [++]
 
 Video on Demand or VOD, are huge database of videos/film/media stored into a file ( .m3u or .m3u8 ), you can open it with VLC and see all the contents.
 
@@ -33,7 +34,7 @@ Note: If you have some probem with downloads, try to turn off your antivirus (fo
 
 Download Java 17 (x64 windows) : https://bit.ly/3MFFDEj
 
-Instructions:
+# Windows Instructions:
 
 1) Open CMD, and check the java version (need 17). 
 - $ java -version
@@ -48,8 +49,27 @@ Now, go to generated directory M3U-VodDownloader/m3u_folder and place your perso
 4) Run again 
 - $ java com.github.alfix00.M3UVodDownloader
 
+# Linux (Ubuntu) Instructions:
+1) Download and set Java 17.
+- $ sudo apt update && sudo apt upgrade -y
+- $ sudo add-apt-repository ppa:linuxuprising/java -y
+- $ sudo apt update
+- $ sudo apt-get install oracle-java17-installer oracle-java17-set-default
+2) Check java version (must be 17):
+- $ java --version
+3) clone M3UVod repository:
+- $ git clone https://github.com/Alfix00/M3U-VodDownloader-JE.git
+- (if git isn't installed: $ sudo apt install git)
+4) go to the path: M3U-VodDownloader-JE/out/production/M3U-VODownloader
+- $ cd /M3U-VodDownloader-JE/out/production/M3U-VODownloader 
+5) run for the first time:
+- $ java com.github.alfix00.M3UVodDownloader
+6) place your personal M3U into m3u_folder path.
+7) run again.
+
 - Enojy
 
+<img width="678" alt="image" src="https://user-images.githubusercontent.com/44652155/170825506-9e16f92b-ce5d-4322-929c-c9982fdfbfe1.png">
 
 
 
