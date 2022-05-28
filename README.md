@@ -69,7 +69,7 @@ Now, go to generated directory M3U-VodDownloader/m3u_folder and place your perso
 
 - Enojy
 
-<img width="678" alt="image" src="https://user-images.githubusercontent.com/44652155/170825506-9e16f92b-ce5d-4322-929c-c9982fdfbfe1.png">
+<img width="678" alt="image" src="https://user-images.githubusercontent.com/44652155/170825610-b5a4ed83-0b69-4d03-a043-3cc9b0ac485d.png">
 
 
 
