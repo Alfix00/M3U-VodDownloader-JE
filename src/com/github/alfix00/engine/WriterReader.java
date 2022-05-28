@@ -1,7 +1,6 @@
 package com.github.alfix00.engine;
 
 import com.github.alfix00.models.Channel;
-import com.github.alfix00.models.DownloadList;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -11,17 +10,17 @@ public class WriterReader implements Serializable {
     private final String currentPath = System.getProperty("user.dir");
     private final String download_folder = currentPath + "\\M3U-VodDownloader\\m3u_folder\\dwn_list.bak";
 
-    public void printChannels(ArrayList<Channel> channels) throws IOException, ClassNotFoundException {
+    public void printChannels(ArrayList<Channel> channels) throws IOException {
         ArrayList<Channel> download_list = getChannels();
         if(download_list.size() > 0) {
             download_list.addAll(channels);
-            FileOutputStream f = new FileOutputStream(new File(download_folder));
+            FileOutputStream f = new FileOutputStream(download_folder);
             ObjectOutputStream o = new ObjectOutputStream(f);
             o.writeObject(download_list);
             o.close();
             f.close();
         }else if(channels.size() > 0 ){
-            FileOutputStream f = new FileOutputStream(new File(download_folder));
+            FileOutputStream f = new FileOutputStream(download_folder);
             ObjectOutputStream o = new ObjectOutputStream(f);
             o.writeObject(channels);
             o.close();
@@ -32,7 +31,7 @@ public class WriterReader implements Serializable {
 
     public void  emptyChannels() throws IOException {
         ArrayList<Channel> channels = new ArrayList<>();
-        FileOutputStream f = new FileOutputStream(new File(download_folder));
+        FileOutputStream f = new FileOutputStream(download_folder);
         ObjectOutputStream o = new ObjectOutputStream(f);
         o.writeObject(channels);
         o.close();
@@ -50,9 +49,9 @@ public class WriterReader implements Serializable {
                 }
             }
         } catch (Exception e){
-            return new ArrayList<Channel>(0);
+            return new ArrayList<>(0);
         }
-        return new ArrayList<Channel>(0);
+        return new ArrayList<>(0);
     }
 
 
@@ -61,7 +60,7 @@ public class WriterReader implements Serializable {
             File file = new File(download_folder);
             boolean empty = !file.exists() || file.length() == 0;
             if(empty){
-                FileOutputStream f = new FileOutputStream(new File(download_folder));
+                FileOutputStream f = new FileOutputStream(download_folder);
                 ObjectOutputStream o = new ObjectOutputStream(f);
                 o.writeObject(download_folder);
                 o.close();
@@ -85,7 +84,7 @@ public class WriterReader implements Serializable {
     public void removeIndex(int index) throws IOException {
         ArrayList<Channel> c = getChannels();
         c.remove(index);
-        FileOutputStream f = new FileOutputStream(new File(download_folder));
+        FileOutputStream f = new FileOutputStream(download_folder);
         ObjectOutputStream o = new ObjectOutputStream(f);
         o.writeObject(c);
         o.close();
@@ -103,11 +102,7 @@ public class WriterReader implements Serializable {
 
     public void removeByChannel(Channel c){
         ArrayList<Channel> ch = getChannels();
-        for(Channel c1 : ch){
-            if(c1.equals(c)){
-                ch.remove(c1);
-            }
-        }
+        ch.removeIf(c1 -> c1.equals(c));
     }
 
 }

@@ -4,7 +4,6 @@ import com.github.alfix00.engine.WriterReader;
 import com.github.alfix00.models.Category;
 import com.github.alfix00.models.Channel;
 import com.github.alfix00.models.Vault;
-import com.github.alfix00.view.Menu;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -153,7 +152,7 @@ public class SearchChannel {
 
     // --------------------- Search into result list
 
-    private void searchListResult(ArrayList<Channel> search_list, Vault v) throws IOException, ClassNotFoundException {
+    private void searchListResult(ArrayList<Channel> search_list, Vault v) throws IOException {
         if(search_list.size() > 0){
             System.out.flush();
             int index = 0;

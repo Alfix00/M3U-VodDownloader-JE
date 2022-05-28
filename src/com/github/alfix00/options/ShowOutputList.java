@@ -17,17 +17,15 @@ public class ShowOutputList {
         System.out.print("\nChoice: ");
         int input = scancode.nextInt();
         switch (input) {
-            case 1:
+            case 1 -> {
                 v.printAllChannels();
                 f.pressAnyKeyToContinue();
-                break;
-            case 2:
+            }
+            case 2 -> {
                 v.printAllCategories();
                 f.pressAnyKeyToContinue();
-                break;
-            default:
-                f.pressAnyKeyToContinue();
-                break;
+            }
+            default -> f.pressAnyKeyToContinue();
         }
     }
 }

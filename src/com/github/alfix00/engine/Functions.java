@@ -96,7 +96,7 @@ public class Functions {
         try {
             System.in.read();
         }
-        catch(Exception e){}
+        catch(Exception ignored){}
     }
 
     public void setM3uPath (String m3uPath){
@@ -107,8 +107,7 @@ public class Functions {
         try{
             URL whatismyip = new URL("http://checkip.amazonaws.com");
             BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
-            String ip = in.readLine(); //you get the IP as a String
-            return ip;
+            return in.readLine();
         } catch (Exception e){
             return "Cannot reach your IP - (Maybe offline?)";
         }

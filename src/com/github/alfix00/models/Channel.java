@@ -15,9 +15,6 @@ public class Channel implements Serializable {
     private int index;
 
 
-    public Channel() {
-    }
-
     public Channel(String name, String url){
         this.name = name;
         this.url = url;
@@ -38,7 +35,7 @@ public class Channel implements Serializable {
     }
 
     public String getLogo() {
-        return logo;
+       return logo;
     }
 
     public void setLogo(String info) {

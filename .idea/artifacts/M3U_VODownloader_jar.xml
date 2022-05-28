@@ -4,6 +4,9 @@
     <root id="archive" name="M3U-VODownloader.jar">
       <element id="module-output" name="M3U-VODownloader" />
       <element id="library" level="project" name="jsoup" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+      </element>
     </root>
   </artifact>
 </component>

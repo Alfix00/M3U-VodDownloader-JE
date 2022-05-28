@@ -7,7 +7,6 @@ import java.net.*;
 import java.text.DecimalFormat;
 import java.util.*;
 
-import com.github.alfix00.engine.WriterReader;
 
 
 public class DownloadList {
@@ -40,21 +39,14 @@ public class DownloadList {
                     int choice = sc.nextInt();
                     System.out.print("\n");
                     switch (choice) {
-                        case 1:
-                            startSingleDownload();
-                            return;
-                        case 2:
-                            startFullDownload();
-                            return;
-                        case 3:
+                        case 1 -> startSingleDownload();
+                        case 2 -> startFullDownload();
+                        case 3 -> {
                             removeChannel(downloadList);
                             showDownloadList(v);
-                            return;
-                        case 4:
-                            cleanDownloadList();
-                            return;
-                        default:
-                            System.out.println("Going back ...");
+                        }
+                        case 4 -> cleanDownloadList();
+                        default -> System.out.println("Going back ...");
                     }
                 } else {
                     System.out.println("[!] Download list is Empty. -- Going back...");
@@ -71,7 +63,7 @@ public class DownloadList {
 
     }
 
-    public void removeDuplicates() throws IOException, ClassNotFoundException {
+    public void removeDuplicates() throws IOException {
         ArrayList<Channel> downloadList = wr.getChannels();
         File[] listOfFiles = new File(currentPath+"/M3U-VodDownloader/download_folder").listFiles();
         ArrayList<Channel> withoutDuplicates = new ArrayList<>();
@@ -89,6 +81,7 @@ public class DownloadList {
                     if (file.isFile()) {
                         String tmp_name = file.getName();
                         tmp_name = tmp_name.replace(".mkv", "")
+                                .replaceAll(".mp4", "")
                                 .replaceAll("\\{.*?}", "")
                                 .replaceAll("\\[.*?]", "")
                                 .replaceAll("\\(.*\\)", "")
@@ -118,19 +111,6 @@ public class DownloadList {
         }
     }
 
-    private boolean isInteger(String s, int radix) {
-        if (s.isEmpty()) return false;
-        for (int i = 0; i < s.length(); i++) {
-            if (i == 0 && s.charAt(i) == '-') {
-                if (s.length() == 1) return false;
-                else continue;
-            }
-            if (Character.digit(s.charAt(i), radix) < 0) return false;
-        }
-        return true;
-    }
-
-
     private void switchChange() {
         this.changed = !this.changed;
     }
@@ -139,12 +119,12 @@ public class DownloadList {
         return this.changed;
     }
 
-    private void removeChannel(ArrayList<Channel> channels) throws IOException, ClassNotFoundException {
+    private void removeChannel(ArrayList<Channel> channels) throws IOException {
         try {
             if (channels.size() > 0) {
                 System.out.println("\n[*] Insert channel index to remove (digit -1 or a letter to exit) : ");
                 int choice = 0;
-                int channel_size = 0;
+                int channel_size;
                 channel_size = channels.size();
                 while (choice > -1 && choice < channel_size) {
                     choice = sc.nextInt();
@@ -155,6 +135,7 @@ public class DownloadList {
                         switchChange();
                         System.out.println("[-] " + name + " Removed.");
                         System.out.println("\n[Remove index ( 0-" + channel_size + ")] ");
+                        showDownloadList(v);
                         System.out.println("[*] Insert channel index to remove (digit -1 or a letter to exit) :  ");
                         choice = sc.nextInt();
                     } else {
@@ -223,7 +204,7 @@ public class DownloadList {
             download.join();
             assert (!download.isAlive());
             if (file.isFile() && downloadComplete) {
-                URL url = null;
+                URL url;
                 url = new URL(download_URL);
                 HttpURLConnection http = (HttpURLConnection) url.openConnection();
                 http.setConnectTimeout(5000);
@@ -243,9 +224,9 @@ public class DownloadList {
     private class DownloadTask implements Runnable {
 
         private static final DecimalFormat df = new DecimalFormat("#,###.00");
-        private File out;
-        private String download_url;
-        private String title;
+        private final File out;
+        private final String download_url;
+        private final String title;
 
         public DownloadTask(String download_url, File out, String title) {
             this.download_url = download_url;
@@ -256,8 +237,8 @@ public class DownloadList {
         @Override
         public void run() {
             try {
-                HttpURLConnection http = null;
-                URL url = null;
+                HttpURLConnection http;
+                URL url;
                 url = new URL(download_url);
                 if (v.isProxyMode()) {
                     Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(v.getCurrentProxyIP(), Integer.parseInt(v.getCurrentProxyPort())));
@@ -270,7 +251,7 @@ public class DownloadList {
                 http.setReadTimeout(5000);
                 long contentLong = http.getContentLengthLong();
                 double fileSize = (double) contentLong;
-                double fileSizeDwm = 0.00;
+                double fileSizeDwm;
                 int code = http.getResponseCode();
                 if (code == 200) {
                     boolean ok = checkFileExist(contentLong, title);
@@ -280,9 +261,9 @@ public class DownloadList {
                         BufferedOutputStream bout = new BufferedOutputStream(fos, 1024);
                         byte[] buffer = new byte[1024];
                         double downloaded = 0.00;
-                        double fileSizeComplete = 0.00;
-                        int read = 0;
-                        double percentDownload = 0.00;
+                        double fileSizeComplete;
+                        int read;
+                        double percentDownload;
                         long startTime = System.nanoTime();
                         while ((read = in.read(buffer, 0, 1024)) >= 0) {
                             bout.write(buffer, 0, read);
@@ -291,9 +272,9 @@ public class DownloadList {
                             fileSizeComplete = (fileSize / 1024) / 1024;
                             percentDownload = (downloaded * 100) / fileSize;
                             String percent = String.format("%.2f", percentDownload);
-                            float bytesPerSec = (float) downloaded / ((System.nanoTime() - startTime) / 1000000000);
+                            float bytesPerSec = (float) downloaded / ((System.nanoTime() - startTime) / 1000000000.0f);
                             float kbPerSec = bytesPerSec / (1024);
-                            float mbPerSec = kbPerSec / (1024);
+                            //float mbPerSec = kbPerSec / (1024);
                             String out = "Downloaded " + percent + "% - Speed: " + df.format(kbPerSec) + " Kbps -- " + title + " -- Size:  " + df.format(fileSizeDwm) + " MB /" + df.format(fileSizeComplete) + " MB";
                             System.out.print("\r" + out);
                             downloadComplete = true;

@@ -1,9 +1,6 @@
 package com.github.alfix00.options;
 
-import com.github.alfix00.engine.Functions;
-import com.github.alfix00.models.Channel;
 import com.github.alfix00.models.Vault;
-import com.github.alfix00.view.Menu;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -21,8 +18,7 @@ public class ProxyMode {
 
     private String getProxyPath(){
         String currentPath = System.getProperty("user.dir");
-        String proxy_folder =  currentPath +"\\M3U-VodDownloader\\proxy_folder\\proxy.txt";
-        return proxy_folder;
+        return currentPath +"\\M3U-VodDownloader\\proxy_folder\\proxy.txt";
     }
 
     private void downloadProxyFromWeb(Vault v) throws IOException {
@@ -39,7 +35,7 @@ public class ProxyMode {
             ArrayList<String> proxies = new ArrayList<>();
             Document doc = Jsoup.connect("https://www.free-proxy-list.net").get();
             Elements tables = doc.select("tbody");
-            for (Element table : tables) {
+            for (Element ignored : tables) {
                 for (Element row : tables.select("tr")) {
                     Elements tds = row.select("td");
                     if (tds.size() == 8) {
@@ -53,7 +49,7 @@ public class ProxyMode {
             return proxies;
         } catch (Exception e) {
             System.out.println("[!] Error while catching new proxies [!]");
-            return new ArrayList<String>();
+            return new ArrayList<>();
         }
     }
 
@@ -65,7 +61,7 @@ public class ProxyMode {
             proxy_file.createNewFile();
         }
         Scanner s = new Scanner(new File(proxy_folder));
-        ArrayList<String> old_proxies = new ArrayList<String>();
+        ArrayList<String> old_proxies = new ArrayList<>();
         while (s.hasNext()) {
             old_proxies.add(s.next());
         }
@@ -77,14 +73,13 @@ public class ProxyMode {
                 HashSet<String> tmp =  new HashSet<>(old_proxies);
                 tmp.clear();
                 tmp.addAll(listWithoutDuplicates);
-                ArrayList<String> list = new ArrayList<String>(tmp);
-                old_proxies = list;
+                old_proxies = new ArrayList<>(tmp);
             }
         } else if(proxies.size() > 0){
             old_proxies = proxies;
         }
         OutputStream os = new FileOutputStream(proxy_folder);
-        PrintWriter pw = new PrintWriter(new OutputStreamWriter(os, "UTF-8"));
+        PrintWriter pw = new PrintWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8));
         File file = new File(proxy_folder);
         if (file.exists() && !file.isDirectory()) {
             System.out.println("[**] Creating empty proxy.txt file... ");
@@ -118,7 +113,7 @@ public class ProxyMode {
             File directory = new File(proxy_folder);
             if (directory.exists()) {
                 Scanner s = new Scanner(new File(proxy_folder));
-                ArrayList<String> prx = new ArrayList<String>();
+                ArrayList<String> prx = new ArrayList<>();
                 while (s.hasNext()) {
                     prx.add(s.next());
                 }
@@ -192,7 +187,7 @@ public class ProxyMode {
                     System.out.println("[Error] Can't get connection with this proxy ["+proxy+":"+port+"]");
                 }
             } else {
-                System.out.println("[Error] Wrong proxy input -- correct format = IP:PORT");
+                System.out.println("[Error] Wrong proxy input -- correct format = IP:PORT  (xxxx.xxxx.xxxx.xxxx:yyyy");
             }
             return v;
         } catch (IOException e){
@@ -216,7 +211,7 @@ public class ProxyMode {
             System.out.println("* Attempt(s) "+attempts + " | proxy = "+proxy);
             port = proxy.substring(proxy.lastIndexOf(":") + 1);
             proxy = proxy.substring(0, proxy.indexOf(':'));
-            condition = pingHost(proxy,Integer.parseInt(port),800);
+            condition = pingHost(proxy,Integer.parseInt(port),1000);
             if(attempts == 200){
                 System.out.println("Can't connect to a proxy, check if the proxy list is valid.");
                 break;
@@ -237,17 +232,14 @@ public class ProxyMode {
     private static boolean pingHost(String host, int port, int timeout) {
         try (Socket socket = new Socket()) {
             socket.connect(new InetSocketAddress(host, port), timeout);
-            HttpURLConnection http = null;
+            HttpURLConnection http;
             url = new URL("http://www.google.com");
             Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(host, port));
             http = (HttpURLConnection) url.openConnection(proxy);
             http.setConnectTimeout(600);
             http.setReadTimeout(600);
             int code = http.getResponseCode();
-            if (code == 200) {
-                return true;
-            }
-            return false;
+            return code == 200;
         } catch (IOException e) {
             return false; // Either timeout or unreachable or failed DNS lookup.
         }
@@ -257,7 +249,7 @@ public class ProxyMode {
         String currentPath = System.getProperty("user.dir");
         String proxy_folder = currentPath + "\\M3U-VodDownloader\\proxy_folder\\proxy.txt";
         ArrayList<String> proxies = new ArrayList<>();
-        FileOutputStream f = new FileOutputStream(new File(proxy_folder));
+        FileOutputStream f = new FileOutputStream(proxy_folder);
         ObjectOutputStream o = new ObjectOutputStream(f);
         o.writeObject(proxies);
         o.close();
@@ -280,6 +272,13 @@ public class ProxyMode {
         }
     }
 
+    private Vault turnOffProxyMode(Vault v){
+        System.clearProperty("http.proxyHost");
+        System.clearProperty("http.proxyPort");
+        v.setProxyMode(false);
+        return v;
+    }
+
 
     public Vault setProxyMode(Vault v) throws IOException {
         Scanner scanner = new Scanner(System.in);
@@ -291,6 +290,7 @@ public class ProxyMode {
         System.out.print("\n3) Set random proxy | (from proxy.txt)" );
         System.out.print("\n4) Connect to a proxy manually");
         System.out.print("\n5) Delete proxy list.");
+        System.out.print("\n6) Turn off Proxy Mode");
         System.out.print("\n\n0) Back to menu.");
         System.out.print("\n ---------------------------------------");
         System.out.print("\n\n Choice: ");
@@ -323,6 +323,9 @@ public class ProxyMode {
                 break;
             case 5:
                 v = deleteProxyList(v);
+                break;
+            case 6:
+                v = turnOffProxyMode(v);
                 break;
             case 0:
                 break;

@@ -1,5 +1,4 @@
 package com.github.alfix00.engine;
-import com.github.alfix00.engine.Functions;
 import com.github.alfix00.models.Category;
 import com.github.alfix00.models.Channel;
 import com.github.alfix00.models.Vault;

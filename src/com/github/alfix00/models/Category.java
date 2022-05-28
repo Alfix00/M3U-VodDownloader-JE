@@ -1,5 +1,4 @@
 package com.github.alfix00.models;
-import com.github.alfix00.models.Channel;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -14,8 +13,6 @@ public class Category implements Serializable {
     private String name;
     private String info;
     private int size = 0;
-
-    public Category() {}
 
     public Category(String name){
         this.name = name;
